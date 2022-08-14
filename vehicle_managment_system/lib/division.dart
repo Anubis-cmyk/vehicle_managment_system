@@ -58,7 +58,7 @@ class _DivisionPageState extends State<DivisionPage> {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: GridView.count(
                 crossAxisCount: 2,
                 children: List.generate(100, (index) {
@@ -72,7 +72,6 @@ class _DivisionPageState extends State<DivisionPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: Container(
-                        height: double.infinity,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.vertical(
                             bottom: Radius.circular(10),
@@ -81,15 +80,15 @@ class _DivisionPageState extends State<DivisionPage> {
                           color: Colors.white70,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 2),
+                          padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 2),
                           child: Center(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children:const [
-                                Center(child: Text("Devision Name")),
+                                Center(child: Text("Division Name")),
                                 Padding(
-                                  padding: EdgeInsets.only(top: 10,bottom: 10),
+                                  padding: EdgeInsets.only(top: 6,bottom: 6),
                                   child: Center(child: Icon(Icons.public,size: 40,)),
                                 ),
                                 Center(child: Text('Vehicles : 0')),

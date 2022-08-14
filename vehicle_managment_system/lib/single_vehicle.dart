@@ -22,7 +22,7 @@ class _SingleVehiclePageState extends State<SingleVehiclePage> {
      body: Stack(
        children: <Widget>[
          Padding(
-           padding: const EdgeInsets.symmetric(vertical: 30,horizontal: 20),
+           padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
            child: Container(
              height: double.infinity,
              decoration: const BoxDecoration(
@@ -45,7 +45,7 @@ class _SingleVehiclePageState extends State<SingleVehiclePage> {
                    ],
                  ),
                  Padding(
-                   padding: const EdgeInsets.only(top: 20),
+                   padding: const EdgeInsets.only(top: 10),
                    child: Row(
                      mainAxisAlignment: MainAxisAlignment.center,
                      children: [

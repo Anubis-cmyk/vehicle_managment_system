@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AddVehiclePage extends StatefulWidget {
   AddVehiclePage({Key? key}) : super(key: key);
@@ -15,10 +16,22 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
   final _formKey = GlobalKey<FormState>();
   List<String> _locations = ['A', 'B', 'C', 'D'];
   String _selectedLocation = 'Please choose a location';
+  String _VehicleNumber='';
+  String _DepartmentNumber='';
+  String _RegistrationNumber='';
+  String _Division='';
+  String _Modal='';
+  String _Type='';
+  String _State='';
+  String _OParatorName='';
+  String _OparatingWeight='';
+  String _Consumption='';
+  String _Remark='';
 
   @override
   Widget build(BuildContext context) {
-
+    // Initialize FlutterFire
+    future: Firebase.initializeApp();
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -68,6 +81,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                         }
                         return null;
                       },
+                      onChanged:(value) {
+                        setState(() {
+                          _VehicleNumber = value;
+                        });
+                      },
                     ),
                   ),
                   Padding(
@@ -89,6 +107,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                           return 'Please enter department number';
                         }
                         return null;
+                      },
+                      onChanged:(value) {
+                        setState(() {
+                          _DepartmentNumber = value;
+                        });
                       },
                     ),
                   ),
@@ -112,6 +135,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                         }
                         return null;
                       },
+                      onChanged:(value) {
+                        setState(() {
+                          _RegistrationNumber = value;
+                        });
+                      },
                     ),
                   ),
                   Padding(
@@ -128,7 +156,9 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                         hint: const Text("Please choose a division",style: TextStyle(color: Colors.white),),
                         onChanged: (newVal) {
                           _selectedLocation = newVal.toString();
-                          setState(() {});
+                          setState(() {
+                            _Division = newVal.toString();
+                          });
                         }),
                     ),
                   ),
@@ -146,7 +176,9 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                           hint: const Text("Please choose a vehicle modal",style: TextStyle(color: Colors.white),),
                           onChanged: (newVal) {
                             _selectedLocation = newVal.toString();
-                            setState(() {});
+                            setState(() {
+                              _Modal = newVal.toString();
+                            });
                           }),
                     ),
                   ),
@@ -164,7 +196,9 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                           hint: const Text("Please choose a vehicle type ",style: TextStyle(color: Colors.white),),
                           onChanged: (newVal) {
                             _selectedLocation = newVal.toString();
-                            setState(() {});
+                            setState(() {
+                              _Type = newVal.toString();
+                            });
                           }),
                     ),
                   ),
@@ -182,7 +216,9 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                           hint: const Text("Please choose a vehicle state ",style: TextStyle(color: Colors.white),),
                           onChanged: (newVal) {
                             _selectedLocation = newVal.toString();
-                            setState(() {});
+                            setState(() {
+                              _State = newVal.toString();
+                            });
                           }),
                     ),
                   ),
@@ -206,6 +242,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                         }
                         return null;
                       },
+                      onChanged:(value) {
+                        setState(() {
+                          _OParatorName = value;
+                        });
+                      },
                     ),
                   ),
                   Padding(
@@ -228,6 +269,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                         }
                         return null;
                       },
+                      onChanged:(value) {
+                        setState(() {
+                          _OparatingWeight = value;
+                        });
+                      },
                     ),
                   ),
                   Padding(
@@ -249,6 +295,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                           return 'Please enter consumption :';
                         }
                         return null;
+                      },
+                      onChanged:(value) {
+                        setState(() {
+                          _Consumption = value;
+                        });
                       },
                     ),
                   ),
@@ -275,6 +326,11 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                         }
                         return null;
                       },
+                      onChanged:(value) {
+                        setState(() {
+                          _Remark = value;
+                        });
+                      },
                     ),
                   ),
                   Padding(
@@ -284,9 +340,22 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-
+                            SaveVehicle(
+                              vehicleNumber: _VehicleNumber,
+                              departmentNumber : _DepartmentNumber,
+                              registrationNumber : _RegistrationNumber,
+                              division : _Division,
+                              modal : _Modal,
+                              type : _Type,
+                              state : _State,
+                              oparatorName : _OParatorName,
+                              oparationWeight : _OparatingWeight,
+                              consumption : _Consumption,
+                              remark : _Remark
+                            );
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
+
                             );
                           }
                         },
@@ -303,4 +372,37 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
       ),
     );
   }
+}
+
+Future SaveVehicle(
+    {required String vehicleNumber,
+      required String departmentNumber,
+      required String registrationNumber,
+      required String division,
+      required String modal,
+      required String type,
+      required String state,
+      required String oparatorName,
+      required String oparationWeight,
+      required String consumption,
+      required String remark})
+async{
+  final docVehicle = FirebaseFirestore.instance.collection('vehicles').doc();
+  final json ={
+    'id' : docVehicle.id,
+    'vehicleNumber' : vehicleNumber,
+    'departmentNumber' : departmentNumber,
+    'registrationNumber' : registrationNumber,
+    'division' : division,
+    'modal' : modal,
+    'type' : type,
+    'state' : state,
+    'oparatorName' : oparatorName,
+    'oparationWeight' : oparationWeight,
+    'consumption' : consumption,
+    'remark' : remark,
+  };
+
+  //write data to firebase
+  await docVehicle.set(json);
 }

@@ -57,7 +57,7 @@ class _ModalPageState extends State<ModalPage> {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: GridView.count(
                 crossAxisCount: 2,
                 children: List.generate(100, (index) {
@@ -75,7 +75,7 @@ class _ModalPageState extends State<ModalPage> {
                           color: Colors.white70,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 2),
+                          padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 2),
                           child: Center(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +83,7 @@ class _ModalPageState extends State<ModalPage> {
                               children:const [
                                 Center(child: Text("Modal Name")),
                                 Padding(
-                                  padding: EdgeInsets.only(top: 10,bottom: 10),
+                                  padding: EdgeInsets.only(top: 6,bottom: 6),
                                   child: Center(child: Icon(Icons.electric_car_rounded,size: 40,)),
                                 ),
                                 Center(child: Text('Vehicles : 0')),
