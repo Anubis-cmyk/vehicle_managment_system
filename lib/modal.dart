@@ -82,7 +82,7 @@ class _ModalPageState extends State<ModalPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const VehicleListPage()),
+                            builder: (context) =>  VehicleListPage(fromPage: 'modal',fromWhere: modalList[index].toString())),
                       );
                     },
                     child: Padding(

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:vehicle_managment_system/Vehicle_modal.dart';
 import 'package:vehicle_managment_system/single_vehicle.dart';
+
 class VehiclePage extends StatefulWidget {
   const VehiclePage({Key? key}) : super(key: key);
   @override

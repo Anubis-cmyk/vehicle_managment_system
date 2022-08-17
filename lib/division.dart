@@ -75,7 +75,7 @@ class _DivisionPageState extends State<DivisionPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (
-                          context) => const VehicleListPage()),
+                          context) =>  VehicleListPage(fromPage: 'division',fromWhere: divisionList[index].toString())),
                     );
                   },
                   child: Padding(

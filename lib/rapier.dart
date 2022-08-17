@@ -1,12 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:vehicle_managment_system/Vehicle_modal.dart';
+import 'package:vehicle_managment_system/single_vehicle.dart';
+
 class RapierVehiclePage extends StatefulWidget {
-  RapierVehiclePage({Key? key}) : super(key: key);
+  final String fromPage;
+  final String fromWhere;
+  const RapierVehiclePage({Key? key, required this.fromPage, required this.fromWhere}) : super(key: key);
   @override
-  _RapierVehiclePageState createState() => new _RapierVehiclePageState();
+  _RapierVehiclePageState createState() => new _RapierVehiclePageState(fromPage,fromWhere);
 }
 class _RapierVehiclePageState extends State<RapierVehiclePage> {
+  final String fromPage;
+  final String fromWhere;
+  _RapierVehiclePageState(this.fromPage, this.fromWhere);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,32 +24,32 @@ class _RapierVehiclePageState extends State<RapierVehiclePage> {
       child: Scaffold(
         appBar :  AppBar(
             automaticallyImplyLeading: false,
-          elevation: 5.0,
-          title:   TextButton(
-            child: const Text(
-            "Enter vehicle number to search .. ",
-            style: TextStyle(
-              color: Colors.black38,
-              fontSize: 15
-            ))
-           , onPressed: () { showSearch(
+            elevation: 5.0,
+            title:   TextButton(
+              child: const Text(
+                  "Enter vehicle number to search .. ",
+                  style: TextStyle(
+                      color: Colors.black38,
+                      fontSize: 15
+                  ))
+              , onPressed: () { showSearch(
               context: context,
               delegate: MySearchDelegate(),
             );},
-          ),
-          backgroundColor: Colors.white70,
-          actions:  [
-            IconButton(
-              icon:(Icon(Icons.search)),
-              color: Colors.black38,
-              onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: MySearchDelegate(),
-                );
-              },
             ),
-          ],
+            backgroundColor: Colors.white70,
+            actions:  [
+              IconButton(
+                icon:(Icon(Icons.search)),
+                color: Colors.black38,
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: MySearchDelegate(),
+                  );
+                },
+              ),
+            ],
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(15),
@@ -47,69 +57,92 @@ class _RapierVehiclePageState extends State<RapierVehiclePage> {
               ),
             )
         ),
-          body:Padding(
-            padding: const EdgeInsets.only(top: 8,bottom: 8,left: 4,right: 4),
-            child:  Container(
-                decoration:  BoxDecoration(
-                  boxShadow:[BoxShadow(blurRadius: 6.0,color: Colors.blueGrey)],
-                  color: Colors.blueAccent.withOpacity(0.8),
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(15),
-                    top: Radius.circular(15),
-                  ),
-                ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  children: List.generate(100, (index) {
-                    return TextButton(
-                      onPressed: () {  },
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            height: double.infinity,
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(10),
-                                  top: Radius.circular(10),
-                                ),
-                                color: Colors.white70,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children:[
-                                    const Text("Department Number"),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10,bottom: 10),
-                                      child: Image.asset('assets/images/img_hero.png'),
-                                    ),
-                                    Center(child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: const [
-                                        Text('Vehicle number'),
-                                      ],
-                                    ))
-                                   ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                  }),
-                ),
+        body:Padding(
+          padding: const EdgeInsets.only(top: 8,bottom: 8,left: 4,right: 4),
+          child:  Container(
+            decoration:  BoxDecoration(
+              boxShadow:[BoxShadow(blurRadius: 6.0,color: Colors.blueGrey)],
+              color: Colors.blueAccent.withOpacity(0.8),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(15),
+                top: Radius.circular(15),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:StreamBuilder<List<Vehicle>>(
+                  stream: fromPage == 'division' ? readVehicles(fromWhere) : fromPage == 'modal' ? readVehiclesModal(fromWhere) :readVehiclesType(fromWhere),
+                  builder: (context,snapShot){
+                    if(snapShot.error != null){
+                      return Text('Something went wrong ! ${snapShot.error.toString()}');
+                    }else if(snapShot.hasData){
+                      final vehicles = snapShot.data;
+                      if(fromPage == 'division'){
+                        return GridView.count(
+                          crossAxisCount: 2,
+                          children: vehicles!.map((vehicle) => buildVehicle(vehicle,context)).toList(),
+                        );
+                      }else if (fromPage == 'modal'){
+                        return GridView.count(
+                          crossAxisCount: 2,
+                          children: vehicles!.map((vehicle) => buildVehicle(vehicle,context)).toList(),
+                        );
+                      }else{
+                        return GridView.count(
+                          crossAxisCount: 2,
+                          children: vehicles!.map((vehicle) => buildVehicle(vehicle,context)).toList(),
+                        );
+                      }
+                    }else{
+                      return const Center(child: CircularProgressIndicator.adaptive());
+                    }
+                  }
               ),
             ),
           ),
+        ),
       ),
     );
   }
 }
+
+Widget buildVehicle(Vehicle vehicle, BuildContext context) =>
+    TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  SingleVehiclePage(id :vehicle.id)),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+              top: Radius.circular(10),
+            ),
+            color: Colors.white70,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children:[
+                Text(vehicle.departmentNumber),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10,bottom: 10),
+                  child: Image.asset('assets/images/img_hero.png'),
+                ),
+                Text(vehicle.vehicleNumber),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
 
 
 class MySearchDelegate extends SearchDelegate {
@@ -167,3 +200,29 @@ class MySearchDelegate extends SearchDelegate {
       },);
   }
 }
+
+
+Stream<List<Vehicle>>readVehicles(fromWhere) =>FirebaseFirestore.instance
+    .collection('vehicles')
+    .where('state',  isEqualTo : 'Rapier').where('division' , isEqualTo : fromWhere)
+    .snapshots()
+    .map((snapshot) =>
+    snapshot.docs.map((doc) =>
+        Vehicle.fromJson( doc.data())).toList());
+
+
+Stream<List<Vehicle>>readVehiclesModal(fromWhere) =>FirebaseFirestore.instance
+    .collection('vehicles')
+    .where('state',  isEqualTo : 'Rapier').where('modal' , isEqualTo : fromWhere)
+    .snapshots()
+    .map((snapshot) =>
+    snapshot.docs.map((doc) =>
+        Vehicle.fromJson( doc.data())).toList());
+
+Stream<List<Vehicle>>readVehiclesType(fromWhere) =>FirebaseFirestore.instance
+    .collection('vehicles')
+    .where('state',  isEqualTo : 'Rapier').where('modal' , isEqualTo : fromWhere)
+    .snapshots()
+    .map((snapshot) =>
+    snapshot.docs.map((doc) =>
+        Vehicle.fromJson( doc.data())).toList());

@@ -4,12 +4,18 @@ import 'ideal.dart';
 import 'rapier.dart';
 
 class VehicleListPage extends StatefulWidget {
-  const VehicleListPage({Key? key}) : super(key: key);
+  final String fromPage;
+  final String fromWhere;
+  const VehicleListPage({Key? key, required this.fromPage, required this.fromWhere}) : super(key: key);
   @override
-  _VehicleListPageState createState() => _VehicleListPageState();
+  _VehicleListPageState createState() => _VehicleListPageState(fromPage,fromWhere);
 }
 
 class _VehicleListPageState extends State<VehicleListPage> {
+  final String fromPage;
+  final String fromWhere;
+  _VehicleListPageState(this.fromPage,this.fromWhere);
+
   @override
   Widget build(BuildContext context)  => DefaultTabController(length: 3,
       child:Scaffold(
@@ -50,9 +56,9 @@ class _VehicleListPageState extends State<VehicleListPage> {
           ),
           body: TabBarView(
             children: [
-              Center(child: RunningVehiclePage()),
-              Center(child: IdealVehiclePage()),
-              Center(child: RapierVehiclePage()),
+              Center(child: RunningVehiclePage(fromPage :fromPage,fromWhere: fromWhere)),
+              Center(child: IdealVehiclePage(fromPage :this.fromPage,fromWhere: fromWhere)),
+              Center(child: RapierVehiclePage(fromPage :this.fromPage,fromWhere: fromWhere)),
             ],
           )
       )

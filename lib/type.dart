@@ -79,7 +79,7 @@ class _TypePageState extends State<TypePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const VehicleListPage()),
+                              builder: (context) =>   VehicleListPage(fromPage: 'type',fromWhere: typeList[index].toString())),
                         );
                       },
                       child: Padding(
