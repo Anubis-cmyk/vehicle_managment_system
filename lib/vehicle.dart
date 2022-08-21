@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:vehicle_managment_system/Vehicle_modal.dart';
+import 'package:vehicle_managment_system/search.dart';
 import 'package:vehicle_managment_system/single_vehicle.dart';
 
 class VehiclePage extends StatefulWidget {
@@ -27,10 +28,12 @@ class _VehiclePageState extends State<VehiclePage> {
               color: Colors.black38,
               fontSize: 15
             ))
-           , onPressed: () { showSearch(
-              context: context,
-              delegate: MySearchDelegate(),
-            );},
+           , onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
+            );
+          },
           ),
           backgroundColor: Colors.white70,
           actions:  [
@@ -38,9 +41,9 @@ class _VehiclePageState extends State<VehiclePage> {
               icon:(const Icon(Icons.search)),
               color: Colors.black38,
               onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: MySearchDelegate(),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
                 );
               },
             ),
@@ -126,63 +129,6 @@ Widget buildVehicle(Vehicle vehicle, BuildContext context) =>TextButton(
   ),
 );
 
-
-class MySearchDelegate extends SearchDelegate {
-  List<String> searchResult = [
-    '1213',
-    '2e432',
-    '3qweqw',
-  ];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) =>
-      [
-        IconButton(onPressed: () {
-          query.isEmpty ? close(context, null) : query = '';
-        },
-          icon: const Icon(Icons.clear),
-        ),
-      ];
-
-  @override
-  Widget? buildLeading(BuildContext context) =>
-      IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => close(context, null),
-      );
-
-  @override
-  Widget buildResults(BuildContext context) =>
-      Center(
-        child: Text(
-          query,
-        ),
-      );
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = searchResult.where((searchResult) {
-      final result = searchResult.toLowerCase();
-      final input = query.toLowerCase();
-
-      return result.contains(input);
-    }).toList();
-
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
-
-        return ListTile(
-          title: Text(suggestion),
-          onTap: () {
-            query = suggestion;
-          },
-        );
-      },);
-  }
-
-}
 Stream<List<Vehicle>>readVehicles() =>FirebaseFirestore.instance
     .collection('vehicles')
     .snapshots()

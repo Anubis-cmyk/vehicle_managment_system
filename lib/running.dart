@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:vehicle_managment_system/Vehicle_modal.dart';
+import 'package:vehicle_managment_system/search.dart';
 import 'package:vehicle_managment_system/single_vehicle.dart';
 
 class RunningVehiclePage extends StatefulWidget {
@@ -25,8 +26,7 @@ class _RunningVehiclePageState extends State<RunningVehiclePage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Scaffold(
-        appBar :  AppBar(
-            automaticallyImplyLeading: false,
+        appBar :    AppBar(
             elevation: 5.0,
             title:   TextButton(
               child: const Text(
@@ -35,20 +35,22 @@ class _RunningVehiclePageState extends State<RunningVehiclePage> {
                       color: Colors.black38,
                       fontSize: 15
                   ))
-              , onPressed: () { showSearch(
-              context: context,
-              delegate: MySearchDelegate(),
-            );},
+              , onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
+              );
+            },
             ),
             backgroundColor: Colors.white70,
             actions:  [
               IconButton(
-                icon:(Icon(Icons.search)),
+                icon:(const Icon(Icons.search)),
                 color: Colors.black38,
                 onPressed: () {
-                  showSearch(
-                    context: context,
-                    delegate: MySearchDelegate(),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
                   );
                 },
               ),
@@ -148,63 +150,6 @@ Widget buildVehicle(Vehicle vehicle, BuildContext context) =>
     );
 
 
-class MySearchDelegate extends SearchDelegate {
-  List<String> searchResult = [
-    '1213',
-    '2e432',
-    '3qweqw',
-  ];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) =>
-      [
-        IconButton(onPressed: () {
-          query.isEmpty ? close(context, null) : query = '';
-        },
-          icon: const Icon(Icons.clear),
-        ),
-      ];
-
-  @override
-  Widget? buildLeading(BuildContext context) =>
-      IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => close(context, null),
-      );
-
-  @override
-  Widget buildResults(BuildContext context) =>
-      Center(
-        child: Text(
-          query,
-        ),
-      );
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = searchResult.where((searchResult) {
-      final result = searchResult.toLowerCase();
-      final input = query.toLowerCase();
-
-      return result.contains(input);
-    }).toList();
-
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
-
-        return ListTile(
-          title: Text(suggestion),
-          onTap: () {
-            query = suggestion;
-          },
-        );
-      },);
-  }
-}
-
-
 Stream<List<Vehicle>>readVehicles(String fromWhere) =>FirebaseFirestore.instance
     .collection('vehicles')
     .where('state',  isEqualTo : 'Running').where('division' , isEqualTo : fromWhere)
@@ -216,7 +161,7 @@ Stream<List<Vehicle>>readVehicles(String fromWhere) =>FirebaseFirestore.instance
 
 Stream<List<Vehicle>>readVehiclesModal(fromWhere) =>FirebaseFirestore.instance
     .collection('vehicles')
-    .where('state',  isEqualTo : 'Rapier').where('modal' , isEqualTo : fromWhere)
+    .where('state',  isEqualTo : 'Running').where('modal' , isEqualTo : fromWhere)
     .snapshots()
     .map((snapshot) =>
     snapshot.docs.map((doc) =>
@@ -224,7 +169,7 @@ Stream<List<Vehicle>>readVehiclesModal(fromWhere) =>FirebaseFirestore.instance
 
 Stream<List<Vehicle>>readVehiclesType(fromWhere) =>FirebaseFirestore.instance
     .collection('vehicles')
-    .where('state',  isEqualTo : 'Rapier').where('modal' , isEqualTo : fromWhere)
+    .where('state',  isEqualTo : 'Running').where('modal' , isEqualTo : fromWhere)
     .snapshots()
     .map((snapshot) =>
     snapshot.docs.map((doc) =>

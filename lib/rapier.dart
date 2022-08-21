@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:vehicle_managment_system/Vehicle_modal.dart';
+import 'package:vehicle_managment_system/search.dart';
 import 'package:vehicle_managment_system/single_vehicle.dart';
 
 class RapierVehiclePage extends StatefulWidget {
@@ -22,8 +23,7 @@ class _RapierVehiclePageState extends State<RapierVehiclePage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Scaffold(
-        appBar :  AppBar(
-            automaticallyImplyLeading: false,
+        appBar :   AppBar(
             elevation: 5.0,
             title:   TextButton(
               child: const Text(
@@ -32,20 +32,22 @@ class _RapierVehiclePageState extends State<RapierVehiclePage> {
                       color: Colors.black38,
                       fontSize: 15
                   ))
-              , onPressed: () { showSearch(
-              context: context,
-              delegate: MySearchDelegate(),
-            );},
+              , onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
+              );
+            },
             ),
             backgroundColor: Colors.white70,
             actions:  [
               IconButton(
-                icon:(Icon(Icons.search)),
+                icon:(const Icon(Icons.search)),
                 color: Colors.black38,
                 onPressed: () {
-                  showSearch(
-                    context: context,
-                    delegate: MySearchDelegate(),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
                   );
                 },
               ),

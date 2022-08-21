@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:vehicle_managment_system/Vehicle_modal.dart';
+import 'package:vehicle_managment_system/search.dart';
 import 'vehicle_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,29 +21,31 @@ class _DivisionPageState extends State<DivisionPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Scaffold(
-        appBar :  AppBar(
+        appBar :   AppBar(
             elevation: 5.0,
             title:   TextButton(
               child: const Text(
-                  "Enter division name to search .. ",
+                  "Enter vehicle number to search .. ",
                   style: TextStyle(
                       color: Colors.black38,
                       fontSize: 15
                   ))
-              , onPressed: () { showSearch(
-              context: context,
-              delegate: MySearchDelegate(),
-            );},
+              , onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
+              );
+            },
             ),
             backgroundColor: Colors.white70,
             actions:  [
               IconButton(
-                icon:(Icon(Icons.search)),
+                icon:(const Icon(Icons.search)),
                 color: Colors.black38,
                 onPressed: () {
-                  showSearch(
-                    context: context,
-                    delegate: MySearchDelegate(),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  CloudFirestoreSearch()),
                   );
                 },
               ),
