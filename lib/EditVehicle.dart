@@ -5,15 +5,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:vehicle_managment_system/Vehicle_modal.dart';
 import 'package:vehicle_managment_system/dashboard.dart';
 
-class AddVehiclePage extends StatefulWidget {
-  AddVehiclePage({Key? key}) : super(key: key);
+class EditVehiclePage extends StatefulWidget {
+  final Vehicle vehicle;
+  EditVehiclePage({Key? key, required this.vehicle}) : super(key: key);
   @override
-  _AddVehiclePageState createState() {
-    return _AddVehiclePageState();
+  _EditVehiclePageState createState() {
+    return _EditVehiclePageState(vehicle);
   }
 }
 
-class _AddVehiclePageState extends State<AddVehiclePage> {
+class _EditVehiclePageState extends State<EditVehiclePage> {
+  final Vehicle vehicle;
+  _EditVehiclePageState(this.vehicle);
+
   final _formKey = GlobalKey<FormState>();
   List<String> _divisions = ['A', 'B', 'C', 'D'];
   List<String> _state = ['Running', 'Ideal', 'Rapier'];
@@ -43,7 +47,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
       appBar:  AppBar(
         backgroundColor: Colors.blue.withOpacity(0.3),
         title: const Center(
-          child: Text('Add new vehicle',
+          child: Text( 'Edit vehicle details',
             style: TextStyle(
               color: Colors.white70,
             ),
@@ -68,6 +72,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue: vehicle.vehicleNumber,
                       decoration: InputDecoration(
                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                           fillColor: Colors.white,
@@ -95,6 +100,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue: vehicle.departmentNumber,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                         fillColor: Colors.white,
@@ -106,12 +112,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                             color: Colors.white
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter department number';
-                        }
-                        return null;
-                      },
+
                       onChanged:(value) {
                         setState(() {
                           _DepartmentNumber = value;
@@ -122,6 +123,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue:vehicle.registrationNumber,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                         fillColor: Colors.white,
@@ -157,6 +159,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                             child: new Text(val),
                           );
                         }).toList(),
+                        value: vehicle.division,
                         hint: const Text("Please choose a division",style: TextStyle(color: Colors.white),),
                         onChanged: (newVal) {
                           _selectedLocation = newVal.toString();
@@ -177,6 +180,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                               child: new Text(val),
                             );
                           }).toList(),
+                          value: vehicle.modal,
                           hint: const Text("Please choose a vehicle modal",style: TextStyle(color: Colors.white),),
                           onChanged: (newVal) {
                             _selectedLocation = newVal.toString();
@@ -197,6 +201,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                               child: new Text(val),
                             );
                           }).toList(),
+                          value: vehicle.type,
                           hint: const Text("Please choose a vehicle type ",style: TextStyle(color: Colors.white),),
                           onChanged: (newVal) {
                             _selectedLocation = newVal.toString();
@@ -217,6 +222,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                               child: new Text(val),
                             );
                           }).toList(),
+                          value: vehicle.state,
                           hint: const Text("Please choose a vehicle state ",style: TextStyle(color: Colors.white),),
                           onChanged: (newVal) {
                             _selectedLocation = newVal.toString();
@@ -229,6 +235,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue: vehicle.oparatorName,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                         fillColor: Colors.white,
@@ -256,6 +263,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue: vehicle.oparatingWeight,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                         fillColor: Colors.white,
@@ -283,6 +291,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue: vehicle.consumption,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                         fillColor: Colors.white,
@@ -310,6 +319,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue : vehicle.remark,
                       keyboardType: TextInputType.multiline,
                       minLines: 1,//Normal textInputField will be displayed
                       maxLines: 5,// when user presses enter it will adapt to it
@@ -344,28 +354,33 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            SaveVehicle(
-                              vehicleNumber: _VehicleNumber,
-                              departmentNumber : _DepartmentNumber,
-                              registrationNumber : _RegistrationNumber,
-                              division : _Division,
-                              modal : _Modal,
-                              type : _Type,
-                              state : _State,
-                              oparatorName : _OParatorName,
-                              oparationWeight : _OparatingWeight,
-                              consumption : _Consumption,
-                              remark : _Remark
-                            );
+                            Vehicle data =  Vehicle(
+                                vehicleNumber: _VehicleNumber == ""?vehicle.vehicleNumber:_VehicleNumber,
+                                departmentNumber : _DepartmentNumber == ""?vehicle.departmentNumber:_DepartmentNumber,
+                                registrationNumber : _RegistrationNumber == ""?vehicle.registrationNumber:_RegistrationNumber,
+                                division : _Division == ""?vehicle.division:_Division,
+                                modal : _Modal == ""?vehicle.modal:_Modal,
+                                type : _Type == ""?vehicle.type:_Type,
+                                state : _State == ""?vehicle.state:_State,
+                                oparatorName :_OParatorName == ""?vehicle.oparatorName:_OParatorName,
+                                oparatingWeight : _OparatingWeight == ""?vehicle.oparatingWeight:_OparatingWeight,
+                                consumption : _Consumption == ""?vehicle.consumption:_Consumption ,
+                                remark :  _Remark == ""?vehicle.departmentNumber: _Remark,
+                                id: vehicle.id);
+                            updateUser(data);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Processing Data')),
 
                             );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>  AdminPage()),
-                            );
                           }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>  AdminPage()),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Success ')),
+
+                          );
                         },
                         child: const Text('Save'),
                       ),
@@ -382,35 +397,26 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
   }
 }
 
-Future SaveVehicle(
-    {required String vehicleNumber,
-      required String departmentNumber,
-      required String registrationNumber,
-      required String division,
-      required String modal,
-      required String type,
-      required String state,
-      required String oparatorName,
-      required String oparationWeight,
-      required String consumption,
-      required String remark})
-async{
-  final docVehicle = FirebaseFirestore.instance.collection('vehicles').doc();
-  final json ={
-    'id' : docVehicle.id,
-    'vehicleNumber' : vehicleNumber,
-    'departmentNumber' : departmentNumber,
-    'registrationNumber' : registrationNumber,
-    'division' : division,
-    'modal' : modal,
-    'type' : type,
-    'state' : state,
-    'oparatorName' : oparatorName,
-    'oparationWeight' : oparationWeight,
-    'consumption' : consumption,
-    'remark' : remark,
-  };
+Future<void> updateUser(Vehicle vehicle) {
+    CollectionReference users = FirebaseFirestore.instance.collection('vehicles');
+    final json ={
+      'id' : vehicle.id,
+      'vehicleNumber' : vehicle.vehicleNumber,
+      'departmentNumber' : vehicle.departmentNumber,
+      'registrationNumber' :  vehicle.registrationNumber,
+      'division' :  vehicle.division,
+      'modal' :  vehicle.modal,
+      'type' :  vehicle.type,
+      'state' :  vehicle.state,
+      'oparatorName' :  vehicle.oparatorName,
+      'oparationWeight' :  vehicle.oparatingWeight,
+      'consumption' :  vehicle.consumption,
+      'remark' :  vehicle.remark,
+    };
+    return users
+        .doc(vehicle.id)
+        .update(json)
+        .then((value) => print("User Updated"))
+        .catchError((error) => print("Failed to update user: $error"));
 
-  //write data to firebase
-  await docVehicle.set(json);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:vehicle_managment_system/dashboard.dart';
 import 'main.dart';
 import 'addVehicle.dart';
 
@@ -157,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                 if(_password == 'admin' && _email == 'admin@email.com'){
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => AddVehiclePage()),
+                                    MaterialPageRoute(builder: (context) => AdminPage()),
                                   );
                                 }else{
                                   ScaffoldMessenger.of(context).showSnackBar(

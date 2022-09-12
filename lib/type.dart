@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:vehicle_managment_system/Vehicle_modal.dart';
 import 'package:vehicle_managment_system/search.dart';
 import 'package:vehicle_managment_system/vehicle_list.dart';
 
@@ -12,7 +13,7 @@ class TypePage extends StatefulWidget {
 class _TypePageState extends State<TypePage> {
   @override
   Widget build(BuildContext context) {
-    List<String> typeList = ['A', 'B', 'C', 'D'];
+    List<String> typeList = Vehicle.getVehicleTypeList();
     Firebase.initializeApp();
     final Stream<QuerySnapshot> _vehicleStream = FirebaseFirestore.instance
         .collection('vehicles').snapshots(includeMetadataChanges: true);

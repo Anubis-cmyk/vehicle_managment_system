@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:vehicle_managment_system/Vehicle_modal.dart';
 import 'package:vehicle_managment_system/search.dart';
 import 'package:vehicle_managment_system/vehicle_list.dart';
 
@@ -15,7 +16,7 @@ class _ModalPageState extends State<ModalPage> {
   @override
   Widget build(BuildContext context) {
 
-    List<String> modalList = ['A', 'B', 'C', 'D'];
+    List<String> modalList = Vehicle.getVehicleModalList();
     Firebase.initializeApp();
     final Stream<QuerySnapshot> _vehicleStream = FirebaseFirestore.instance
         .collection('vehicles').snapshots(includeMetadataChanges: true);
